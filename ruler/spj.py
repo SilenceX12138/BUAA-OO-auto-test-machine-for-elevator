@@ -9,9 +9,10 @@ from move import move_check
 from output_parser import get_state
 from person import person_check
 from time_judge import time_check
+from capacity import capacity_check
 
 
-# list of original input
+# list of strip-time input
 def get_input_list(data_file):
     input_list = []
     with open(data_file, 'r') as f_in:
@@ -32,12 +33,18 @@ def get_input_list(data_file):
 # list of original output
 def get_output_list(output_file):
     output_list = []
+    sub_output_lists = {}
     with open(output_file, 'r') as f_out:
         tmp_output_list = f_out.readlines()
         for output in tmp_output_list:
             output = output.strip('\n')
-            output_list.append(output)
-    return output_list
+            tag = output[-1:]
+            if (tag in sub_output_lists):
+                sub_output_lists[tag].append(output[:-2])
+            else:
+                sub_output_lists[tag] = [output[:-2]]
+            output_list.append(output[:-2])
+    return output_list, sub_output_lists
 
 
 # list of timed arrive
@@ -73,23 +80,32 @@ def get_send_list(output_list=[]):
 
 def check(data_file, output_file):
     input_list = get_input_list(data_file)
-    output_list = get_output_list(output_file)
-    arrive_list = get_arrive_list(output_list)
-    door_list = get_door_list(output_list)
+    output_list, sub_output_lists = get_output_list(output_file)
     send_list = get_send_list(output_list)
-
-    r1 = door_check(output_list, door_list)
-    if (r1 != ""):
-        return r1 + " in door_check has problem"
-    r2 = move_check(arrive_list)
-    if (r2 != ""):
-        return r2 + " in move_check has problem"
-    r3 = person_check(input_list, output_list, send_list)
-    if (r3 != ""):
-        return r3 + " in person_check has problem"
-    r4 = time_check(data_file, output_file)
-    if (r4):
+    
+    r0 = time_check(data_file, output_file)
+    if (r0):
         return "time_check has problem"
+    
+    for elev in sub_output_lists:
+        sub_output_list = sub_output_lists[elev]
+        sub_arrive_list = get_arrive_list(sub_output_list)
+        sub_door_list = get_door_list(sub_output_list)
+        sub_send_list = get_send_list(sub_output_list)
+
+        r1 = door_check(sub_output_list, sub_door_list)
+        if (r1 != ""):
+            return r1 + " in door_check has problem"
+        r2 = move_check(sub_arrive_list)
+        if (r2 != ""):
+            return r2 + " in move_check has problem"
+        r3 = person_check(input_list, sub_output_list, send_list)
+        if (r3 != ""):
+            return r3 + " in person_check has problem"
+        r4 = capacity_check(sub_send_list)
+        if (r4):
+            return "capacity_check has problem"
+    
 
     return ""
 
