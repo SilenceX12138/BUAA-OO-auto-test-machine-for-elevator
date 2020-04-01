@@ -2,8 +2,6 @@ from output_parser import get_floor, get_state, get_time, get_send_info
 from request_parser import get_req_info
 
 # door should be open when (un)load person -> only OPEN/IN/OUT can be ahead of IN/OUT
-
-
 def in_and_out_on_open_judge(output_list=[]):
     for i in range(len(output_list)):
         state_i = get_state(i, output_list)
@@ -18,8 +16,6 @@ def in_and_out_on_open_judge(output_list=[]):
 
 # all people should arrive at dest finally
 # -> req_in and req_out can be found in send_list and req_in is ahead of req_out
-
-
 def dest_judge(input_list=[], send_list=[]):
     for req in input_list:
         req_id, from_floor, to_floor = get_req_info(req)
@@ -36,8 +32,6 @@ def dest_judge(input_list=[], send_list=[]):
 
 # person (un)loading should be at the floor elevator opens
 # -> within a pair of IN/OUT floor stays the same
-
-
 def meet_floor_judge(output_list=[]):
     for i in range(len(output_list)):
         state_i = get_state(i, output_list)
