@@ -17,7 +17,6 @@ from gene_data import gene_data
 from get_result import get_result
 from get_graph import get_graph
 
-
 # build directories needed
 def buildcwd():
     dirs_to_build = ['download_data']
@@ -41,13 +40,13 @@ def enum_and_sort_cases(datapath):
     datas = []
     for case in cases:
         with open(datapath + "/" + case, 'r') as f_case:
-            datas.append(f_case.readline())
+            datas.append(f_case.readlines())
         os.remove(datapath + "/" + case)
     datas = sorted(datas,
                    key=lambda data: len(data))  # sort is based on length
     for i in range(len(datas)):
         with open(datapath + "/testcase" + str(i) + ".txt", "w") as f_data:
-            f_data.write(datas[i])
+            f_data.writelines(datas[i])
 
 
 # whether to perform debug testing
@@ -81,6 +80,7 @@ if __name__ == "__main__":
     elif (regression_test()):
         get_result("./data")
     else:
-        gene_data(10)
+        case_cnt = int(input("Please tell us how many cases do you want:\n"))
+        gene_data(case_cnt)
         get_result("./data")
     get_graph()

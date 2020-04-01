@@ -9,7 +9,7 @@ def get_time_and_req_list(data_list=[]):
     time_list = []
     req_list = []
     for data in data_list:
-        sep_pos = ((str)(data)).index(']')
+        sep_pos = (str(data)).index(']')
         time_list.append(data[1:sep_pos - 2])
         req_list.append(data[sep_pos - 1:])
     return time_list, req_list

@@ -1,1 +1,0 @@
-Check Pass!	Your input is valid, base time is 93, max time is 103
