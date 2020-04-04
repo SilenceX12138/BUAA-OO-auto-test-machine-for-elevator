@@ -11,7 +11,7 @@ from time_judge import get_std_time
 def get_result(datadir):
     dirnames = os.listdir("./lib")
     threads = []
-    get_std_time(datadir)
+    # get_std_time(datadir)
     for dirname in dirnames:
         thread = get_sub_result(dirname, datadir)
         threads.append(thread)
@@ -23,7 +23,7 @@ def get_result(datadir):
             result_file = "./result/" + dirname + "/result.txt"
             with open(result_file, 'r') as f_sub_rst:
                 r = f_sub_rst.readlines()
-                if (len(r) > 1):
+                if (len(r) != 1):
                     f_rst.write(dirname + " needs help\n")
         f_rst.write("Finished\n")
 

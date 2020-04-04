@@ -1,13 +1,15 @@
 import os
 import shutil
-import threading
 import sys
+import threading
+from builtins import Exception
 
-from get_output import get_output
+from astroid.node_classes import Pass
 
 path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(path + "/ruler")
 
+from get_output import get_output
 from spj import check
 
 
@@ -30,14 +32,25 @@ class get_sub_result(threading.Thread):
         with open("./result/" + self.dirname + "/result.txt", "w") as f_rst:
             for i in range(len(data_cnt)):
                 data_file = self.datadir + "/" + "testcase" + str(i) + ".txt"
-                r = check(
-                    data_file,
-                    "./output/" + self.dirname + "/output" + str(i) + ".txt")
+                try:
+                    r = check(
+                        data_file, "./output/" + self.dirname + "/output" +
+                        str(i) + ".txt")
+                except (Exception, ValueError):
+                    r = "unexpected situation occured!"
                 if (r != ""):
-                    shutil.copyfile(
-                        data_file,
-                        "./download_data/" + "testcase" + str(i) + ".txt")
+                    try:
+                        shutil.copyfile(
+                            data_file,
+                            "./download_data/" + "testcase" + str(i) + ".txt")
+                    except Exception:
+                        pass
                     f_rst.writelines("----------Testcase" + str(i) +
                                      "----------\n")
                     f_rst.writelines(r + "\n\n")
             f_rst.writelines("Finished\n")
+
+
+if __name__ == "__main__":
+    r = get_sub_result("archer", "./download_data")
+    r.check_result()

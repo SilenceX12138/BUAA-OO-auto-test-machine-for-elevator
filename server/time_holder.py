@@ -1,10 +1,15 @@
 import os
 
+import numpy as npy
+
 
 class time_holder():
     def __init__(self, dirname):
         self.dirname = dirname
         self.time_list = []
+        self.mean = 0
+        self.var = 0
+        self.std = 0
         self.mvp_cnt = 0
 
     def get_case_time(self):
@@ -15,6 +20,11 @@ class time_holder():
                 last_move = f_opt.readlines()[-1]
                 pos = last_move.index(']')
                 self.time_list.append((float)(last_move[1:pos]))
+
+    def get_stats(self):
+        self.mean = npy.mean(self.time_list)
+        self.var = npy.var(self.time_list)
+        self.std = npy.std(self.time_list, ddof=1)
 
 
 if __name__ == "__main__":

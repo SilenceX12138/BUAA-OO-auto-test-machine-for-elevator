@@ -7,10 +7,11 @@ def distance_judge(arrive_list=[]):
         j = i + 1
         pos_i = arrive_list[i].index('-') + 1
         pos_j = arrive_list[j].index('-') + 1
-        floor_i = (int)(arrive_list[i][pos_i:])
-        floor_j = (int)(arrive_list[j][pos_j:])
+        floor_i = int(arrive_list[i][pos_i:])
+        floor_j = int(arrive_list[j][pos_j:])
         if (abs(floor_i - floor_j) != 1):
-            return True
+            if(floor_i*floor_j != -1):
+                return True
     return False
 
 
@@ -27,12 +28,13 @@ def time_judge(arrive_list=[]):
     return False
 
 
-# available range is [1,15]
+# available range is [-3,-1] plus [1,16]
 def reach_judge(arrive_list=[]):
+    reach = [-3, -2, -1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
     for i in range(len(arrive_list)):
         pos_i = arrive_list[i].index('-') + 1
         floor_i = (int)(arrive_list[i][pos_i:])
-        if (not (floor_i >= 1 and floor_i <= 15)):
+        if (floor_i not in reach):
             return True
     return False
 

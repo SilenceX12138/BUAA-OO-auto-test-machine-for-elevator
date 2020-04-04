@@ -1,4 +1,5 @@
 import os
+
 import matplotlib.pyplot as plt
 import numpy as npy
 
@@ -52,8 +53,8 @@ def get_line_chart(holder_list=[]):
     plt.savefig("./summary/graph/line.png")
 
 
-def get_bar_chart(holder_list):
-    plt.figure(figsize=(25, 10))
+def get_mvp_chart(holder_list):
+    plt.figure(figsize=(30, 15))
     plt.title('MVP Count for All Schedulers')
     plt.xlabel('Scheduler')
     plt.ylabel('MVP Count')
@@ -62,7 +63,45 @@ def get_bar_chart(holder_list):
     mvp_list = [holder.mvp_cnt for holder in holder_list]
     plt.bar(range(len(mvp_list)), mvp_list, tick_label=dirnames)
 
-    plt.savefig("./summary/graph/bar.png")
+    plt.savefig("./summary/graph/mvp_bar.png")
+
+
+def get_stats_chart(holder_list=[]):
+    for holder in holder_list:
+        holder.get_stats()
+
+    plt.figure(figsize=(30, 15))
+    plt.title('Statistics for All Schedulers')
+    plt.xlabel('Scheduler')
+    plt.ylabel('Statisticcs')
+
+    dirnames = [holder.dirname for holder in holder_list]
+    mean_list = [holder.mean for holder in holder_list]
+    var_list = [holder.var for holder in holder_list]
+    std_list = [holder.std for holder in holder_list]
+    x = npy.arange(len(dirnames))
+    rects1 = plt.bar(x, mean_list,
+                     width=0.8/3, label='mean')
+    rects2 = plt.bar(x+0.8/3, var_list,
+                     width=0.8/3, tick_label=dirnames, label='var')
+    rects3 = plt.bar(x+2*0.8/3, std_list,
+                     width=0.8/3, label='std')
+    plt.legend()
+
+    for rect in rects1:
+        height = rect.get_height()
+        plt.text(rect.get_x() + rect.get_width() / 2, height +
+                 1, str(height), ha="center", va="bottom")
+    for rect in rects2:
+        height = rect.get_height()
+        plt.text(rect.get_x() + rect.get_width() / 2, height +
+                 1, str(height), ha="center", va="bottom")
+    for rect in rects3:
+        height = rect.get_height()
+        plt.text(rect.get_x() + rect.get_width() / 2, height +
+                 1, str(height), ha="center", va="bottom")
+
+    plt.savefig("./summary/graph/stats_bar.png")
 
 
 def get_graph():
@@ -70,9 +109,9 @@ def get_graph():
     min_time_list = get_min_time_list(holder_list)
     get_mvp_cnt(holder_list, min_time_list)
     get_line_chart(holder_list)
-    get_bar_chart(holder_list)
+    get_mvp_chart(holder_list)
+    get_stats_chart(holder_list)
 
 
 if __name__ == "__main__":
     get_graph()
-    

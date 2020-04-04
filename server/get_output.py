@@ -35,6 +35,8 @@ def get_output(dirname, datadir):
     for i in range(case_count):
         with open(datadir + "/testcase" + str(i) + ".txt", 'rb') as f_in:
             data_list = f_in.readlines()
+            while (data_list[-1] == "\r\n"):
+                data_list = data_list[:-1]
             time_list, req_list = get_time_and_req_list(data_list)
             delay_time_list = get_delay_time_list(time_list)
         jvm_start_time = time.time()
@@ -43,15 +45,16 @@ def get_output(dirname, datadir):
                 r'java -jar ' + class_path + '/2-1.jar',
                 stdin=PIPE,
                 stdout=f_out,
+                stderr=f_out
             )
-        jvm_launch_time = time.time() - jvm_start_time
-        for i in range(len(data_list)):
-            delay_time = abs(delay_time_list[i] - jvm_launch_time)
-            time.sleep(delay_time)
-            elev_proc.stdin.write(req_list[i])
-            elev_proc.stdin.flush()
-    elev_proc.communicate()
+            jvm_launch_time = time.time() - jvm_start_time
+            for i in range(len(data_list)):
+                delay_time = abs(delay_time_list[i] - jvm_launch_time)
+                time.sleep(delay_time)
+                elev_proc.stdin.write(req_list[i])
+                elev_proc.stdin.flush()
+            elev_proc.communicate()
 
 
 if __name__ == "__main__":
-    get_output("archer", "./data")
+    get_output("random", "./data")

@@ -24,7 +24,7 @@ def get_input_list(data_file):
                 req = req[pos + 1:]
             except ValueError:
                 pass
-            if (req == ""):
+            if (req == "" or len(req)==1):
                 continue
             input_list.append(req)
     return input_list
@@ -83,9 +83,9 @@ def check(data_file, output_file):
     output_list, sub_output_lists = get_output_list(output_file)
     send_list = get_send_list(output_list)
     
-    r0 = time_check(data_file, output_file)
-    if (r0):
-        return "time_check has problem"
+    # r0 = time_check(data_file, output_file)
+    # if (r0):
+    #     return "time_check has problem"
     
     for elev in sub_output_lists:
         sub_output_list = sub_output_lists[elev]
@@ -111,5 +111,5 @@ def check(data_file, output_file):
 
 
 if __name__ == "__main__":
-    r = check("./data/testcase0.txt", "./output/archer/output0.txt")
+    r = check("./data/testcase9.txt", "./output/random/output9.txt")
     print(r)
