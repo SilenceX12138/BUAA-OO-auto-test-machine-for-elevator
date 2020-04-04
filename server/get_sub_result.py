@@ -4,8 +4,6 @@ import sys
 import threading
 from builtins import Exception
 
-from astroid.node_classes import Pass
-
 path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(path + "/ruler")
 
