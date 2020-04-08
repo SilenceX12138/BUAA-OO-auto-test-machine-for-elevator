@@ -1,27 +1,31 @@
 from output_parser import get_state
 
 
-def capacity_check(send_list=[]):
+def capacity_check(send_list=[], elev_type=''):
+    if (elev_type == 'A'):
+        in_str = "1111111"
+    elif (elev_type == 'B'):
+        in_str = "111111111"
+    elif (elev_type == 'C'):
+        in_str = "11111111"
+
     state_str = ""
     for send in send_list:
-        sep_pos = send.index('-')
-        if (send[:sep_pos] == "OPEN"):
+        state = get_state(0,[send])
+        if (state == "IN"):
             state_str += "1"
         else:
             state_str += "0"
-    try:
-        state_str.index("1111111")
+
+    if (in_str in state_str):
         return True
-    except ValueError:
-        return False
+    return False
 
 
 if __name__ == "__main__":
     r = capacity_check([
-        '[  40.4170]OPEN-15', '[  40.8180]CLOSE-15', '[  40.8180]OPEN-15',
-        '[  41.2190]CLOSE-15', '[  40.8180]OPEN-15', '[  40.8180]OPEN-15',
-        '[  40.8180]OPEN-15', '[  40.8180]OPEN-15', '[  40.8180]OPEN-15',
-        '[  40.8180]OPEN-15', '[  40.8180]OPEN-15'
-    ])
+        'IN-15', 'OUT-15', 'IN-15', 'OUT-15', 'IN-15', 'IN-15', 'IN-15',
+        'IN-15', 'IN-15', 'IN-15', 'IN-15'
+    ], 'C')
 
     print(r)
