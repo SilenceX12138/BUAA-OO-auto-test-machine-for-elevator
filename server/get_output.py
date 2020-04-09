@@ -3,6 +3,7 @@ import shutil
 import time
 from random import random
 from subprocess import PIPE, Popen
+from sys import argv
 
 
 def get_time_and_req_list(data_list=[]):
@@ -10,8 +11,14 @@ def get_time_and_req_list(data_list=[]):
     req_list = []
     for data in data_list:
         sep_pos = (str(data)).index(']')
+        # windows
         time_list.append(data[1:sep_pos - 2])
         req_list.append(data[sep_pos - 1:])
+        # linux
+        '''
+        time_list.append(data[1:sep_pos])
+        req_list.append(data[sep_pos + 1:])
+        '''
     return time_list, req_list
 
 
@@ -41,12 +48,11 @@ def get_output(dirname, datadir):
             delay_time_list = get_delay_time_list(time_list)
         jvm_start_time = time.time()
         with open(output_path + "/output" + str(i) + ".txt", 'w') as f_out:
-            elev_proc = Popen(
-                r'java -jar ' + class_path + '/2-1.jar',
-                stdin=PIPE,
-                stdout=f_out,
-                stderr=f_out
-            )
+            elev_proc = Popen(r'java -jar ' + class_path + '/2-1.jar',
+                              stdin=PIPE,
+                              stdout=f_out,
+                              stderr=f_out,
+                              shell=True)
             jvm_launch_time = time.time() - jvm_start_time
             for i in range(len(data_list)):
                 delay_time = abs(delay_time_list[i] - jvm_launch_time)
@@ -57,4 +63,7 @@ def get_output(dirname, datadir):
 
 
 if __name__ == "__main__":
-    get_output("random", "./data")
+    # dirname = argv[1]
+    # datadir = argv[2]
+    # get_output(dirname, datadir)
+    get_output("archer", "./data")
