@@ -1,5 +1,7 @@
 # 电梯调度测试及调优策略
 
+原文链接：https://www.cnblogs.com/silencejiang/p/12701979.html
+
 #### 全文共`2455`字，推荐阅读时间`10~15`分钟。
 
 #### 文章共分四个部分：
@@ -106,12 +108,7 @@ elev_proc = Popen(r'java -jar xxx.jar',
 
 关于`flush`等评论区已经有讨论结果的操作，就不在此详述了。
 
-### 正确性评测结果展示
-
-<img src="C:\Users\Silence\Desktop\share\photo\judge_result.txt.jpg" style="zoom:50%;" />
-
 可以类似中断机制一样建立一个**中断向量表**，发现问题直接中断评测程序，根据中断号返回相应的原因。这对黑盒测试后的修正工作是有非常大的帮助的。
-
 
 
 ## 调优策略
@@ -201,12 +198,6 @@ self.check_result(cpu_time)
 ```
 
 > 需要注意的是，`time`命令直接在`terminal`中调用和使用`os.system`调用的返回结果是不一样的。因此，得到的结果也需要不同的处理方式，具体就看大家喜欢哪一种了。
-
-### CPU时间测试展示
-
-<img src="C:\Users\Silence\AppData\Roaming\Typora\typora-user-images\image-20200414220114614.png" alt="image-20200414220114614" style="zoom: 67%;" />
-
-> 注意到上一张图中`CPU TIME`是0,因为那是在`win`下的结果，没有实现`time_check()`.
 
 ## 结语
 
